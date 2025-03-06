@@ -1,3 +1,5 @@
+import 'package:state_management_project_flutter/users/user_entity.dart';
+
 class AuthState {}
 
 class AuthInitial extends AuthState {}
@@ -19,3 +21,13 @@ class AuthError extends AuthState {
 class AuthLogout extends AuthState {}
 
 class AuthLogin extends AuthState {}
+
+class AuthEmailValid extends AuthState {}
+
+class AuthPasswordValid extends AuthState {}
+
+class AuthEmailInvalid extends AuthState {}
+
+class AuthPasswordInvalid extends AuthState {}
+
+class AuthLoginSuccess extends AuthState {}
