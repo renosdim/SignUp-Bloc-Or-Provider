@@ -1,7 +1,7 @@
 abstract class AuthVariablesAndFuncitons {
   String? email;
   String? password;
-  void onEmailchanged(String email);
+  void onEmailChanged(String email);
   void onPasswordChanged(String password);
-  void onLogin();
+  void login();
 }
