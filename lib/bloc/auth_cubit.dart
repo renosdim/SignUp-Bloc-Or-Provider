@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_project_flutter/bloc/auth_state.dart';
+import 'package:state_management_project_flutter/bloc/cubit_functions_format.dart';
+import 'package:state_management_project_flutter/bloc/cubit_variables_format.dart';
 
-class AuthCubit extends Cubit<AuthState> {
-  String? email;
-  String? password;
+class AuthCubit extends CubitVariablesFormat implements AuthCubitFunctions {
   AuthCubit(super.initialState);
 
+  @override
   void onEmailChanged(String email) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
     if (emailRegex.hasMatch(email)) {
@@ -15,6 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  @override
   void onPasswordChanged(String password) {
     if (password.length < 6) {
       emit(AuthPasswordInvalid());
@@ -23,6 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  @override
   void login() async {
     if (email == null || password == null) {
       emit(AuthError('Email and password must not be empty'));
