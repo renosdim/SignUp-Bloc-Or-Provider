@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
 import 'package:state_management_project_flutter/bloc/auth_state.dart';
 import 'package:state_management_project_flutter/bloc/cubit_functions_format.dart';
 import 'package:state_management_project_flutter/bloc/cubit_variables_format.dart';
 
-class AuthCubit extends CubitVariablesFormat implements AuthCubitFunctions {
+class AuthCubit extends Cubit<AuthState> implements AuthVariablesAndFuncitons {
   AuthCubit(super.initialState);
 
   @override
@@ -35,4 +36,10 @@ class AuthCubit extends CubitVariablesFormat implements AuthCubitFunctions {
       emit(AuthLoginSuccess());
     }
   }
+
+  @override
+  String email;
+
+  @override
+  String password;
 }
