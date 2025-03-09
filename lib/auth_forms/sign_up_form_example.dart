@@ -1,13 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-import 'package:state_management_project_flutter/bloc/sign_up_cubit.dart';
-import 'package:state_management_project_flutter/presentation/signUpWrapper.dart';
 import 'package:state_management_project_flutter/presentation/sign_up_form.dart';
+import 'package:state_management_project_flutter/widgets/pic_container.dart';
+import 'package:state_management_project_flutter/widgets/sign_up_footer.dart';
 
 class SignUpForm extends SignUpFormFormat {
   const SignUpForm(
@@ -65,31 +62,6 @@ class SignUpForm extends SignUpFormFormat {
     } else {
       return "Must match your password exactly...";
     }
-  }
-
-  Widget picContainer(XFile? pic) {
-    return Column(
-      children: [
-        SizedBox(height: 15),
-        Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(width: 3, color: Colors.transparent),
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.deepPurple, Colors.deepOrange],
-                  stops: [0.3, 1])),
-          width: 150,
-          height: 150,
-          child: CircleAvatar(
-              backgroundColor: Colors.black,
-              backgroundImage: pic != null ? FileImage(File(pic.path)) : null,
-              child: Icon(CupertinoIcons.add, color: Colors.deepOrange)),
-        ),
-        SizedBox(height: 15)
-      ],
-    );
   }
 
   Widget mainTitle() {
@@ -194,9 +166,9 @@ class SignUpForm extends SignUpFormFormat {
                                     fontFamily: "San Francisco")),
                           )
                         : (step == SignUpStep.pic
-                            ? picContainer(selectedPic)
+                            ? PicContainer(pic: selectedPic)
                             : Column(children: [
-                                picContainer(selectedPic),
+                                PicContainer(pic: selectedPic),
                                 Row(children: [
                                   Icon(CupertinoIcons.person_alt,
                                       color: Colors.white, size: 15),
@@ -300,115 +272,7 @@ class SignUpForm extends SignUpFormFormat {
     );
   }
 }
+
+
 // TODO: implement copyWith
 
-class SignUpFooter extends StatelessWidget {
-  final SignUpStep? step;
-  const SignUpFooter({super.key, this.step});
-
-  int findIndex() {
-    if (step == SignUpStep.email) {
-      return 0;
-    } else if (step == SignUpStep.name) {
-      return 1;
-    } else if (step == SignUpStep.password) {
-      return 2;
-    } else if (step == SignUpStep.passwordConfirm) {
-      return 3;
-    } else if (step == SignUpStep.pic) {
-      return 4;
-    } else if (step == SignUpStep.finish) {
-      return 5;
-    } else {
-      return 0;
-    }
-  }
-
-  List<double> findGradientStops() {
-    if (step == SignUpStep.email) {
-      return [0, 0.2];
-    } else if (step == SignUpStep.name) {
-      return [0.1, 0.35];
-    } else if (step == SignUpStep.password) {
-      return [0.3, 0.5];
-    } else if (step == SignUpStep.passwordConfirm) {
-      return [0.45, 0.65];
-    } else if (step == SignUpStep.pic) {
-      return [0.65, 0.85];
-    } else {
-      return [1, 1];
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-            width: double.infinity,
-            height: 4,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.deepOrange, Colors.white],
-                    stops: findGradientStops()))),
-        Container(
-          height: 100,
-          child: CupertinoTabBar(
-              currentIndex: findIndex(),
-              backgroundColor: Colors.transparent,
-              activeColor: Colors.deepOrange,
-              inactiveColor: Colors.white,
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(
-                  CupertinoIcons.mail_solid,
-                  shadows: [
-                    BoxShadow(
-                        color: Colors.deepOrange,
-                        blurRadius: 20,
-                        spreadRadius: 30)
-                  ],
-                )),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.person_alt, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.padlock, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.padlock_solid, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.person_crop_circle, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.checkmark_alt, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ]))
-              ]),
-        ),
-      ],
-    );
-  }
-}
