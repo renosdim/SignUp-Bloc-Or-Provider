@@ -2,7 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
 import 'package:state_management_project_flutter/bloc/auth_state.dart';
 
-class SignUpCubit extends Cubit<AuthState> implements SignUpVariablesAndFunctions {
+class SignUpCubit extends Cubit<AuthState>
+    implements SignUpVariablesAndFunctions {
   SignUpCubit(super.initialState);
 
   @override
@@ -10,7 +11,7 @@ class SignUpCubit extends Cubit<AuthState> implements SignUpVariablesAndFunction
 
   @override
   String? password;
-  
+
   @override
   bool? passwordVerified;
 
@@ -31,7 +32,7 @@ class SignUpCubit extends Cubit<AuthState> implements SignUpVariablesAndFunction
   @override
   void onPasswordChanged(String password) {
     if (password.length < 6) {
-      this.password =null;
+      this.password = null;
       passwordVerified = false;
       emit(AuthPasswordInvalid());
     } else {
@@ -56,11 +57,34 @@ class SignUpCubit extends Cubit<AuthState> implements SignUpVariablesAndFunction
   @override
   void onSignUp() async {
     if (email == null || password == null || passwordVerified != true) {
-      emit(AuthError('Email and passwords must not be empty and passwords must match'));
+      emit(AuthError(
+          'Email and passwords must not be empty and passwords must match'));
     } else {
       emit(AuthLoading());
       await Future.delayed(const Duration(seconds: 2));
       emit(AuthSignUpSuccess());
     }
   }
+
+  @override
+  void nextStep() {
+    if (signUpStep == SignUpStep.email && email != null) {
+      signUpStep = SignUpStep.password;
+      emit(AuthSignUpNextStep());
+    } else if (signUpStep == SignUpStep.password && password != null) {
+      signUpStep = SignUpStep.passwordConfirm;
+      emit(AuthSignUpNextStep());
+    } else if (signUpStep == SignUpStep.passwordConfirm &&
+        passwordVerified == true) {
+      signUpStep = SignUpStep.pic;
+      emit(AuthSignUpNextStep());
+    } else if (signUpStep == SignUpStep.pic) {
+      signUpStep = SignUpStep.finish;
+      emit(AuthSignUpNextStep());
+    }
+    // TODO: implement nextStep
+  }
+
+  @override
+  SignUpStep? signUpStep = SignUpStep.email;
 }
