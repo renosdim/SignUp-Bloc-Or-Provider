@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-import 'package:state_management_project_flutter/bloc/auth_state.dart';
+
 import 'package:state_management_project_flutter/presentation/sign_up_form.dart';
 import 'package:state_management_project_flutter/widgets/pic_container.dart';
 import 'package:state_management_project_flutter/widgets/sign_up_footer.dart';
 import 'package:state_management_project_flutter/users/user_entity.dart';
+
+import '../presentation/auth_state.dart';
 
 class SignUpForm extends SignUpFormFormat {
   final AuthState? state;
@@ -29,7 +31,7 @@ class SignUpForm extends SignUpFormFormat {
   bool? get emailValid => state is AuthEmailValid
       ? true
       : (state is AuthEmailInvalid ? false : null);
-  bool? get passwordValid => state is AuthPasswordValid?true:(state is );
+  bool? get passwordValid => state is AuthPasswordValid;
   bool? get passwordsMatch => state is AuthPasswordsMatch;
   bool? get formInProgress => state is AuthSignUpInProgress;
 
@@ -86,15 +88,15 @@ class SignUpForm extends SignUpFormFormat {
     if (step == SignUpStep.email) {
       onChanged = onEmailChanged!;
       errorText = "This is not an email";
-      conditionForValidity = !emailValid;
+      conditionForValidity = !emailValid!;
     } else if (step == SignUpStep.password) {
       onChanged = onPasswordChanged!;
       errorText = "Must contain a capital, a number and a special character";
-      conditionForValidity = !passwordValid;
+      conditionForValidity = !passwordValid!;
     } else if (step == SignUpStep.passwordConfirm) {
       onChanged = onPasswordConfirmChanged;
       errorText = "Passwords don't match";
-      conditionForValidity = !passwordsMatch;
+      conditionForValidity = !passwordsMatch!;
     }
 
     return Scaffold(
