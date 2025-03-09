@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-import 'package:state_management_project_flutter/bloc/auth_state.dart';
+
+
+import 'auth_state.dart';
 
 abstract class SignUpFormFormat extends StatelessWidget {
   final Function(String)? onEmailChanged;
