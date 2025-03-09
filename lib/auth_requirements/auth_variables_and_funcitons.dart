@@ -1,11 +1,24 @@
-abstract class AuthVariablesAndFuncitons {
+abstract class SignInVariablesAndFuncitons {
+  String? email;
+  String? password;
+
+  void onEmailChanged(String email);
+  void onPasswordChanged(String password);
+
+  void onSignIn();
+}
+
+abstract class SignUpVariablesAndFunctions {
   String? email;
   String? password;
   bool? passwordVerified;
+  SignUpStep? signUpStep;
   void onEmailChanged(String email);
   void onPasswordChanged(String password);
   void onPasswordsMatch(String secondPassword);
-  void onSignIn();
+  void nextStep();
+
   void onSignUp();
-  void onSignOut();
 }
+
+enum SignUpStep { email, name, password, passwordConfirm, pic, finish }
