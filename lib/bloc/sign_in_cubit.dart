@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
 import 'package:state_management_project_flutter/bloc/auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> implements AuthVariablesAndFuncitons {
-  AuthCubit(super.initialState);
+class SignInCubit extends Cubit<AuthState> implements SignInVariablesAndFuncitons {
+  SignInCubit(super.initialState);
 
   @override
   void onEmailChanged(String email) {
@@ -25,7 +25,7 @@ class AuthCubit extends Cubit<AuthState> implements AuthVariablesAndFuncitons {
   }
 
   @override
-  void login() async {
+  void onSignIn() async {
     if (email == null || password == null) {
       emit(AuthError('Email and password must not be empty'));
     } else {
@@ -40,4 +40,6 @@ class AuthCubit extends Cubit<AuthState> implements AuthVariablesAndFuncitons {
 
   @override
   String? password;
+  
+  
 }

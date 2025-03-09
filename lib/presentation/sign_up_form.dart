@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 abstract class SignUpFormFormat extends StatelessWidget {
   final Function(String)? onEmailChanged;
   final Function(String)? onPasswordChanged;
-  final bool? formInProgress;
+  final bool? signUpLoading;
   final bool? emailValid;
   final bool? passwordValid;
+  final bool? passwordsMatch;
+  final String? errorMessage;
+  final bool? signUpSuccessful;
+  
 
   final VoidCallback? onSubmit;
 
