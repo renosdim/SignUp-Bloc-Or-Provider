@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:state_management_project_flutter/auth_forms/sign_up_form_example.dart';
-import 'package:state_management_project_flutter/presentation/signUpWrapper.dart';
+import 'package:state_management_project_flutter/bloc/signUpWrapper.dart';
 
 void main() {
   runApp(const MyApp());

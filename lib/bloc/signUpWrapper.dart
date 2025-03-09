@@ -67,13 +67,10 @@ class _Signupwrapper extends StatelessWidget {
           return widget.copyWith(
               onEmailChanged: context.read<SignUpCubit>().onEmailChanged,
               onPasswordChanged: context.read<SignUpCubit>().onPasswordChanged,
-              formInProgress: signUpLoading,
               selectedEmail: context.read<SignUpCubit>().email,
               onPasswordConfirmChanged:
                   context.read<SignUpCubit>().onPasswordsMatch,
-              emailValid: emailValid,
-              passwordValid: passwordValid,
-              passwordsMatch: passwordsMatch,
+              state: state,
               selectedName: null,
               selectedPic: null,
               step: authSignUpNextStep,
