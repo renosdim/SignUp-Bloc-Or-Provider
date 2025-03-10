@@ -31,8 +31,8 @@ class SignUpForm extends SignUpFormFormat {
   bool? get emailValid => state is AuthEmailValid
       ? true
       : (state is AuthEmailInvalid ? false : null);
-  bool? get passwordValid => state is AuthPasswordValid;
-  bool? get passwordsMatch => state is AuthPasswordsMatch;
+  bool? get passwordValid => state is AuthPasswordValid?true:(state is AuthPasswordInvalid?false:null);
+  bool? get passwordsMatch => state is AuthPasswordsMatch?true:(state is AuthPasswordsDoNotMatch?false:null);
   bool? get formInProgress => state is AuthSignUpInProgress;
 
   String titleFind() {
