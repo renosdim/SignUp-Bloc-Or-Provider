@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:state_management_project_flutter/auth_forms/sign_up_form_example.dart';
+import 'package:state_management_project_flutter/presentation/signUpWrapper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,12 +34,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter Demo'),
-        ),
-        body:const SignUpFormExample()
-      ),
+          appBar: AppBar(
+            title: const Text('Flutter Demo'),
+          ),
+          body: const SignUpWrapper(widget: SignUpForm())),
     );
   }
 }
-
