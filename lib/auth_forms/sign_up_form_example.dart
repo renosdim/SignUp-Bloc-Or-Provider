@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-
+import 'package:provider/provider.dart';
 import 'package:state_management_project_flutter/presentation/sign_up_form.dart';
 import 'package:state_management_project_flutter/widgets/pic_container.dart';
 import 'package:state_management_project_flutter/widgets/sign_up_footer.dart';
 import 'package:state_management_project_flutter/users/user_entity.dart';
 
 import '../presentation/auth_state.dart';
+import '../provider/auth_notifier.dart';
 
 class SignUpForm extends SignUpFormFormat {
   final AuthState? state;
@@ -81,6 +82,9 @@ class SignUpForm extends SignUpFormFormat {
 
   @override
   Widget build(BuildContext context) {
+
+    final signUpNotifier = context.read<SignUpNotifier>();
+
     late Function(String)? onChanged;
     String? errorText;
     bool? conditionForValidity;
