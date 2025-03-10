@@ -1,3 +1,5 @@
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
@@ -40,8 +42,18 @@ class SignUpFooter extends StatelessWidget {
     }
   }
 
+  BoxShadow shadow() {
+    return BoxShadow(
+        color: Colors.deepOrange,
+        blurRadius: 20,
+        spreadRadius: 30 );
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    bool mobile = !kIsWeb;
+
     return Column(
       children: [
         Container(
@@ -54,7 +66,7 @@ class SignUpFooter extends StatelessWidget {
                     colors: [Colors.deepOrange, Colors.white],
                     stops: findGradientStops()))),
         Container(
-          height: 100,
+          height: mobile ? 55 : 100,
           child: CupertinoTabBar(
               currentIndex: findIndex(),
               backgroundColor: Colors.transparent,
@@ -63,49 +75,31 @@ class SignUpFooter extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(
-                  CupertinoIcons.mail_solid,
-                  shadows: [
-                    BoxShadow(
-                        color: Colors.deepOrange,
-                        blurRadius: 20,
-                        spreadRadius: 30)
-                  ],
+                  CupertinoIcons.mail_solid, size : mobile ? 20 : null,
+                  shadows: List.generate(mobile ? 1 : 2, (index) {
+                    return shadow();
+                  }),
                 )),
                 BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.person_alt, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
+                    icon: Icon(CupertinoIcons.person_alt, size : mobile ? 20 : null,shadows: List.generate(mobile ? 1 : 2, (index) {
+                      return shadow();
+                    }))),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.padlock, size : mobile ? 20 : null, shadows: List.generate(mobile ? 1 : 2, (index) {
+                      return shadow();
+                    }))),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.padlock_solid, size : mobile ? 20 : null,shadows: [
+                  shadow()
                 ])),
                 BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.padlock, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
+                    icon: Icon(CupertinoIcons.person_crop_circle, size : mobile ? 20 : null,shadows: [
+                  shadow()
                 ])),
                 BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.padlock_solid, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.person_crop_circle, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ])),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.checkmark_alt, shadows: [
-                  BoxShadow(
-                      color: Colors.deepOrange,
-                      blurRadius: 20,
-                      spreadRadius: 30)
-                ]))
+                    icon: Icon(CupertinoIcons.checkmark_alt, size : mobile ? 20 : null,shadows: List.generate(mobile ? 1 : 2, (index) {
+                      return shadow();
+                    })))
               ]),
         ),
       ],

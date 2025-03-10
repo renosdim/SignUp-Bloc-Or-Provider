@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:state_management_project_flutter/auth_forms/sign_up_form_example.dart';
-import 'package:state_management_project_flutter/provider/auth_notifier.dart';
+import 'package:state_management_project_flutter/provider/provider_wrapper.dart';
 
 
 void main() {
@@ -14,10 +13,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => SignUpNotifier(),
-      child: MaterialApp(
-        home: SignUpForm(),
+    return MaterialApp(
+      home: SignUpWrapper(
+        widget: SignUpForm()
       ),
     );
   }

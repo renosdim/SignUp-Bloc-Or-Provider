@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
@@ -12,11 +15,12 @@ import '../presentation/auth_state.dart';
 import '../provider/auth_notifier.dart';
 
 class SignUpForm extends SignUpFormFormat {
-  final AuthState? state;
+  //final AuthState? state;
 
   const SignUpForm({
     super.key,
-    this.state,
+    super.onNameChanged,
+    super.onPicChanged,
     super.onEmailChanged,
     super.onPasswordChanged,
     super.onPasswordConfirmChanged,
@@ -27,27 +31,30 @@ class SignUpForm extends SignUpFormFormat {
     super.selectedName,
     super.selectedPic,
     super.step,
+    super.confirmedPassword,
+    super.selectedPassword,
+    super.controller
   });
 
-  bool? get emailValid => state is AuthEmailValid
-      ? true
-      : (state is AuthEmailInvalid ? false : null);
-  bool? get passwordValid => state is AuthPasswordValid;
-  bool? get passwordsMatch => state is AuthPasswordsMatch;
-  bool? get formInProgress => state is AuthSignUpInProgress;
+  // bool? get emailValid => state is AuthEmailValid
+  //     ? true
+  //     : (state is AuthEmailInvalid ? false : null);
+  // bool? get passwordValid => state is AuthPasswordValid;
+  // bool? get passwordsMatch => state is AuthPasswordsMatch;
+  // bool? get formInProgress => state is AuthSignUpInProgress;
 
   String titleFind() {
     switch (step) {
       case SignUpStep.email:
         return "Pass your email:";
       case SignUpStep.pic:
-        return "Select a profile pic";
+        return "Select a profile pic (Optional):";
       case SignUpStep.name:
-        return "Enter your name";
+        return "Enter your name:";
       case SignUpStep.password:
-        return "Enter your password";
+        return "Enter your password:";
       case SignUpStep.passwordConfirm:
-        return "Confirm your password";
+        return "Confirm your password:";
       default:
         return "All Done!";
     }
@@ -74,7 +81,7 @@ class SignUpForm extends SignUpFormFormat {
       case SignUpStep.name:
         return "It will be displayed in your profile...";
       case SignUpStep.password:
-        return "Must use at least a capital, a number and a special character...";
+        return "A Capital,a number,a special character...";
       default:
         return "Must match your password exactly...";
     }
@@ -83,128 +90,160 @@ class SignUpForm extends SignUpFormFormat {
   @override
   Widget build(BuildContext context) {
 
-    final signUpNotifier = context.read<SignUpNotifier>();
+    double size = MediaQuery.of(context).size.width;
+    bool mobile = !kIsWeb;
 
     late Function(String)? onChanged;
-    String? errorText;
-    bool? conditionForValidity;
+    bool? conditionForError;
 
     if (step == SignUpStep.email) {
       onChanged = onEmailChanged!;
-      errorText = "This is not an email";
-      conditionForValidity = !emailValid!;
+      conditionForError = selectedEmail == null;
     } else if (step == SignUpStep.password) {
       onChanged = onPasswordChanged!;
-      errorText = "Must contain a capital, a number and a special character";
-      conditionForValidity = !passwordValid!;
+      conditionForError = selectedPassword == null;
     } else if (step == SignUpStep.passwordConfirm) {
       onChanged = onPasswordConfirmChanged;
-      errorText = "Passwords don't match";
-      conditionForValidity = !passwordsMatch!;
+      conditionForError = confirmedPassword != true;
+    } else if (step == SignUpStep.name) {
+      onChanged = onNameChanged!;
+      conditionForError = selectedName == null;
+    } else if (step == SignUpStep.pic) {
+      conditionForError = false;
     }
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.black, Colors.deepPurple],
-            stops: [0.4, 1],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.black, Colors.deepPurple],
+              stops: [0.4, 1],
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 17, 0, 30),
-              child: Text(
-                "Your App Sign - Up",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: "San Francisco",
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, mobile ? 50: 17, 0, 50),
+                child: Text(
+                  "Your App Sign - Up",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: mobile? size * 0.06 : size * 0.03,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: "San Francisco",
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                Spacer(),
-                Column(
-                  crossAxisAlignment: step == SignUpStep.finish
-                      ? CrossAxisAlignment.center
-                      : CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 5, left: 10),
-                      child: Text(titleFind(),
-                          style: TextStyle(
-                            fontFamily: "San Francisco",
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.white,
-                            fontSize: 14,
-                          )),
-                    ),
-                    step == SignUpStep.name ||
-                            step == SignUpStep.password ||
-                            step == SignUpStep.passwordConfirm ||
-                            step == SignUpStep.email
-                        ? Container(
-                            width: 900,
-                            height: 50,
-                            child: TextField(
-                              onChanged: onChanged,
-                              obscureText: step == SignUpStep.password ||
-                                  step == SignUpStep.passwordConfirm,
-                              decoration: InputDecoration(
-                                errorText: conditionForValidity == true
-                                    ? errorText
-                                    : null,
-                                hintText: findPlaceholderText(),
-                                hintStyle: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: "San Francisco",
-                                  fontSize: 15,
-                                ),
-                                prefixIcon: findIcon(),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.white, width: 3),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(
-                                      color: Colors.deepOrange, width: 3),
-                                ),
-                              ),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "San Francisco",
-                              ),
-                            ),
-                          )
-                        : PicContainer(pic: selectedPic),
-                    if (conditionForValidity == false)
+              Row(
+                children: [
+                  Spacer(),
+                  Column(
+                    crossAxisAlignment: step == SignUpStep.finish || step == SignUpStep.pic
+                        ? CrossAxisAlignment.center
+                        : CrossAxisAlignment.start,
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: ElevatedButton(
-                          onPressed: nextPage,
-                          child: Text("Next"),
-                        ),
+                        padding: EdgeInsets.only(bottom: 10, left: 10),
+                        child: Text(titleFind(),
+                            style: TextStyle(
+                              fontFamily: "San Francisco",
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                              fontSize: 14,
+                            )),
                       ),
-                  ],
-                ),
-                Spacer(),
-              ],
-            ),
-            Spacer(),
-            SignUpFooter(step: step),
-          ],
+                      step == SignUpStep.name ||
+                              step == SignUpStep.password ||
+                              step == SignUpStep.passwordConfirm ||
+                              step == SignUpStep.email
+                          ? Container(
+                              width: size * 0.9,
+                              height: 50,
+                              child: TextField(
+                                onChanged: onChanged,
+                                controller: controller,
+                                obscureText: step == SignUpStep.password ||
+                                    step == SignUpStep.passwordConfirm,
+                                decoration: InputDecoration(
+                                  hintText: findPlaceholderText(),
+                                  hintStyle: TextStyle(
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontStyle: FontStyle.italic,
+                                    fontFamily: "San Francisco",
+                                    fontSize: 15,
+                                  ),
+                                  prefixIcon: findIcon(),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide:
+                                        BorderSide(color: Colors.white, width: 3),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(
+                                        color: Colors.deepOrange, width: 3),
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "San Francisco",
+                                ),
+                              ),
+                            )
+                          :
+                      (step == SignUpStep.pic?
+                      PicContainer(pic: selectedPic, onPicChanged: onPicChanged,) :
+                      Column(
+                        children: [
+                          PicContainer(pic: selectedPic),
+                          Row(
+                            children: [
+                              Icon(CupertinoIcons.person_alt, color: Colors.white, size: 14,),
+                              SizedBox(width: 3),
+                              Text(selectedName!, style: TextStyle(fontFamily: "San Francisco", fontStyle: FontStyle.italic, fontSize: 14, color: Colors.white))
+                            ]
+                          ),
+                          Row(
+                              children: [
+                                Icon(CupertinoIcons.mail, color: Colors.white, size: 13,),
+                                SizedBox(width: 5),
+                                Text(selectedEmail!, style: TextStyle(fontFamily: "San Francisco", fontStyle: FontStyle.italic, fontSize: 14, color: Colors.white))
+                              ]
+                          )
+                        ],
+                      )),
+                        Row(
+                          children: [
+                            if (step != SignUpStep.email && step != SignUpStep.finish)
+                              TextButton(
+                                onPressed: previousPage,
+                                child: Text("Back", style: TextStyle(fontFamily: "San Francisco", fontSize: 13, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.white)),
+                              ),
+                            if (conditionForError == false)
+                            TextButton(
+                              onPressed: nextPage,
+                              child: Text("Next", style: TextStyle(fontFamily: "San Francisco", fontSize: 13, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  Spacer(),
+                ],
+              ),
+              Spacer(),
+              SignUpFooter(step: step),
+            ],
+          ),
         ),
       ),
     );
@@ -216,20 +255,23 @@ class SignUpForm extends SignUpFormFormat {
     Function(String p1)? onEmailChanged,
     Function(String p1)? onPasswordChanged,
     Function(String p1)? onPasswordConfirmChanged,
+    Function(String p1)? onNameChanged,
+    Function(XFile p1)? onPicChanged,
     String? selectedEmail,
     String? selectedName,
+    String? selectedPassword,
+    bool? confirmedPassword,
     XFile? selectedPic,
     SignUpStep? step,
     VoidCallback? onSubmit,
     VoidCallback? nextPage,
     VoidCallback? previousPage,
+    TextEditingController? controller,
   }) {
     return SignUpForm(
-      state: state ?? this.state,
       onEmailChanged: onEmailChanged ?? this.onEmailChanged,
       onPasswordChanged: onPasswordChanged ?? this.onPasswordChanged,
-      onPasswordConfirmChanged:
-          onPasswordConfirmChanged ?? this.onPasswordConfirmChanged,
+      onPasswordConfirmChanged: onPasswordConfirmChanged ?? this.onPasswordConfirmChanged,
       selectedEmail: selectedEmail ?? this.selectedEmail,
       selectedName: selectedName ?? this.selectedName,
       selectedPic: selectedPic ?? this.selectedPic,
@@ -237,6 +279,11 @@ class SignUpForm extends SignUpFormFormat {
       onSubmit: onSubmit ?? this.onSubmit,
       nextPage: nextPage ?? this.nextPage,
       previousPage: previousPage ?? this.previousPage,
+      onNameChanged: onNameChanged ?? this.onNameChanged,
+      onPicChanged: onPicChanged ?? this.onPicChanged,
+      confirmedPassword: confirmedPassword ?? this.confirmedPassword,
+      selectedPassword: selectedPassword ?? this.selectedPassword,
+      controller: controller ?? this.controller
     );
   }
 }
