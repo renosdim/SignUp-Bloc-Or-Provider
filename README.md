@@ -1,16 +1,6 @@
-# state_management_project_flutter
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# SignUp-With-Provider-Bloc
+This Flutter project is a modern cross-platform (Web, Android, iOS) Application SignUp Process that is managed with professional state management. The classes for the UI remain the same in both the following branches, what changes is the State Management methods. We try to avoid using StatefulWidgets for the purpose of calling SetState() method, because it is known to produce unncessary UI reloads and make unprofessional apps. We try to use StatelessWidgets as much as possible and use Stateful only when necessary.
+# Bloc Branch
+Switch to this Branch to see the Same SignUp process using BlocProvider.
+# Provider Branch
+Switch to this Branch to see the Same SignUp process using Provider (ChangeNotifier).
