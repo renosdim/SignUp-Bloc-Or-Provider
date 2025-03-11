@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-import 'package:state_management_project_flutter/bloc/auth_state.dart';
+
 import 'package:state_management_project_flutter/bloc/sign_up_cubit.dart';
+import 'package:state_management_project_flutter/presentation/auth_state.dart';
 import 'package:state_management_project_flutter/presentation/sign_up_form.dart';
 
 class SignUpWrapper extends StatelessWidget {

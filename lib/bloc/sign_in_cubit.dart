@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_project_flutter/auth_requirements/auth_variables_and_funcitons.dart';
-import 'package:state_management_project_flutter/bloc/auth_state.dart';
 
-class SignInCubit extends Cubit<AuthState> implements SignInVariablesAndFuncitons {
+import 'package:state_management_project_flutter/presentation/auth_state.dart';
+
+class SignInCubit extends Cubit<AuthState>
+    implements SignInVariablesAndFuncitons {
   SignInCubit(super.initialState);
 
   @override
@@ -40,6 +42,4 @@ class SignInCubit extends Cubit<AuthState> implements SignInVariablesAndFunciton
 
   @override
   String? password;
-  
-  
 }
